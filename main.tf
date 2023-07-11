@@ -226,10 +226,10 @@ module "compute" {
 
   azs            = each.value.availability_zone
   subnets        = each.value.subnets
+  key_name       = each.value.key_name
   instance_name  = each.value.instance_name
   instance_type  = each.value.instance_type
   instance_count = each.value.instance_count
-  key_name       = each.value.key_name
 
   tags = local.common_tags
 }
