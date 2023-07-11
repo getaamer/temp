@@ -8,10 +8,12 @@ module "ec2-instance" {
   instance_type     = var.instance_type
   availability_zone = var.azs
 
-  root_block_device {
-    volume_size = var.volume_size
-    volume_type = var.volume_type
-  }
+  root_block_device = [
+    {
+      volume_type = var.volume_type
+      volume_size = var.volume_size
+    }
+  ]
 
   tags = merge(var.tags, {
     Name = "${var.instance_name}${count.index + 1}"
