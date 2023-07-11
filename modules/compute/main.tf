@@ -24,7 +24,7 @@ module "ec2" {
   version = "~> 5.2"
 
   ami                         = data.aws_ami.ubuntu.id
-  key_name                    = "id_rsa"
+  key_name                    = var.key_name
   user_data                   = var.userdata
   subnet_id                   = random_shuffle.subnets.result[0]
   monitoring                  = false

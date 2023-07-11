@@ -192,6 +192,7 @@ module "compute" {
   subnets       = module.network.public_subnets
   volume_size   = 30
   instance_type = "t3.medium"
+  key_name      = module.keypair.key_name
   tags          = local.common_tags
 }
 
