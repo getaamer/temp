@@ -4,7 +4,7 @@ module "ec2-instance" {
   version = "~> 5.2.1"
   name    = var.instance_name
 
-  user_data         = var.instance_name == "ansible" ? file("${path.module}/userdata.tpl") : file("${path.module}/userdata.sh")
+  user_data         = var.user_data
   instance_type     = var.instance_type
   availability_zone = var.azs
 

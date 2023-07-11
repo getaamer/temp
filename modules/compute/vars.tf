@@ -44,3 +44,8 @@ variable "instance_count" {
   type    = number
   default = 1
 }
+
+variable "user_data" {
+  type    = string
+  default = ""
+}

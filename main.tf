@@ -40,6 +40,7 @@ locals {
       key_name          = module.keypair.key_name
       volume_size       = 30
       volume_type       = "gp3"
+      user_data         = file("./temp/userdata.sh")
     },
     worker = {
       availability_zone = element(local.azs, 0)
@@ -51,6 +52,7 @@ locals {
       key_name          = module.keypair.key_name
       volume_size       = 50
       volume_type       = "gp3"
+      user_data         = file("./temp/userdata.sh")
     },
     ansible = {
       availability_zone = element(local.azs, 0)
@@ -62,6 +64,7 @@ locals {
       key_name          = module.keypair.key_name
       volume_size       = 30
       volume_type       = "gp3"
+      user_data         = file("./temp/userdata.tpl")
     }
   }
 
@@ -230,6 +233,7 @@ module "compute" {
   for_each       = local.instances
   instance_count = each.value.instance_count
   instance_name  = each.value.instance_name
+  user_data      = each.value.user_data
 
   tags = local.common_tags
 }
