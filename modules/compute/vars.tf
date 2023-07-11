@@ -20,19 +20,14 @@ variable "instances" {
   }
 }
 
+variable "instance_count" {
+  type    = number
+  default = 1
+}
+
 variable "instance_name" {
   type    = string
   default = ""
-}
-
-variable "volume_size" {
-  type    = number
-  default = 20
-}
-
-variable "volume_type" {
-  type    = string
-  default = "gp3"
 }
 
 variable "instance_type" {
@@ -40,12 +35,7 @@ variable "instance_type" {
   default = ""
 }
 
-variable "instance_count" {
-  type    = number
-  default = 1
-}
-
-variable "user_data" {
+variable "key_name" {
   type    = string
   default = ""
 }
