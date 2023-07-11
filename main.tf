@@ -38,6 +38,8 @@ locals {
       instance_count    = 1,
       environment       = "dev",
       key_name          = module.keypair.key_name
+      volume_size       = 30
+      volume_type       = "gp3"
     },
     worker = {
       availability_zone = element(local.azs, 0)
@@ -47,7 +49,8 @@ locals {
       instance_count    = 2,
       environment       = "dev",
       key_name          = module.keypair.key_name
-
+      volume_size       = 30
+      volume_type       = "gp3"
     },
     ansible = {
       availability_zone = element(local.azs, 0)
@@ -57,6 +60,8 @@ locals {
       instance_count    = 1,
       environment       = "dev",
       key_name          = module.keypair.key_name
+      volume_size       = 30
+      volume_type       = "gp3"
     }
   }
 
@@ -221,15 +226,10 @@ module "keypair" {
 }
 
 module "compute" {
-  source   = "./modules/compute"
-  for_each = local.instances
-
-  azs            = each.value.availability_zone
-  subnets        = each.value.subnets
-  key_name       = each.value.key_name
-  instance_name  = each.value.instance_name
-  instance_type  = each.value.instance_type
+  source         = "./modules/compute"
+  for_each       = local.instances
   instance_count = each.value.instance_count
+  instance_name  = each.value.instance_name
 
   tags = local.common_tags
 }

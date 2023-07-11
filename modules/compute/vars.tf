@@ -20,22 +20,12 @@ variable "instances" {
   }
 }
 
-variable "instance_count" {
-  type    = number
-  default = 1
-}
-
 variable "instance_name" {
   type    = string
   default = ""
 }
 
-variable "instance_type" {
-  type    = string
-  default = ""
-}
-
-variable "key_name" {
-  type    = string
-  default = ""
+variable "instance_count" {
+  type    = number
+  default = 1
 }
