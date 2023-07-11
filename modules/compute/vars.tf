@@ -11,7 +11,7 @@ variable "subnets" {
   default = ""
 }
 
-variable "servers" {
+variable "instances" {
   type = map(object({
   }))
   default = {

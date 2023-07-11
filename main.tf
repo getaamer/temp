@@ -27,7 +27,7 @@ locals {
 
   azs = slice(data.aws_availability_zones.available.names, 0, 3)
 
-  servers = {
+  instances = {
     master = {
       availability_zone = element(local.azs, 0)
       subnets           = module.network.public_subnets
@@ -225,7 +225,7 @@ module "keypair" {
 
 module "compute" {
   source         = "./modules/compute"
-  for_each       = local.servers
+  for_each       = local.instances
   instance_count = each.value.instance_count
   instance_name  = each.value.instance_name
 
