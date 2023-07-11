@@ -1,7 +1,8 @@
 resource "aws_efs_file_system" "efs" {
+  encrypted        = true
   creation_token   = "efs-dev"
-  performance_mode = "generalPurpose"
   throughput_mode  = "bursting"
+  performance_mode = "generalPurpose"
   lifecycle_policy { transition_to_ia = "AFTER_30_DAYS" }
   tags = merge(var.tags, { Name = "dev-efs" })
 }

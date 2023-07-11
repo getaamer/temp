@@ -51,6 +51,9 @@ write_files:
 runcmd:
   - sudo apt update
   - sudo apt upgrade -y
+    # swith to port 7777 for ssh access
+  - perl -pi -e 's/^#?Port 22$/Port 7777/' /etc/ssh/sshd_config
+  - service sshd restart || service ssh restart
   - bash /root/install.sh
   # - gitlab-runner register --non-interactive --url "https://gitlab.com/" --token "glrt-aoejHu2RyBLiSnPsuY73" --executor "docker" --docker-image alpine:latest --description "docker-runner"
 
