@@ -49,18 +49,18 @@ locals {
       instance_count    = 2,
       environment       = "dev",
       key_name          = module.keypair.key_name
-      volume_size       = 30
+      volume_size       = 50
       volume_type       = "gp3"
     },
     ansible = {
       availability_zone = element(local.azs, 0)
       subnets           = module.network.public_subnets
       instance_name     = "ansible"
-      instance_type     = "t3.medium",
+      instance_type     = "t3.small",
       instance_count    = 1,
       environment       = "dev",
       key_name          = module.keypair.key_name
-      volume_size       = 30
+      volume_size       = 10
       volume_type       = "gp3"
     }
   }

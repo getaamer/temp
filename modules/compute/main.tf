@@ -1,11 +1,17 @@
 module "ec2-instance" {
-  count     = var.instance_count
-  source    = "terraform-aws-modules/ec2-instance/aws"
-  name      = var.instance_name
-  version   = "~> 5.2.1"
-  user_data = var.instance_name == "ansible" ? file("${path.module}/userdata.tpl") : file("${path.module}/userdata.sh")
+  count   = var.instance_count
+  source  = "terraform-aws-modules/ec2-instance/aws"
+  version = "~> 5.2.1"
+  name    = var.instance_name
 
+  user_data         = var.instance_name == "ansible" ? file("${path.module}/userdata.tpl") : file("${path.module}/userdata.sh")
+  instance_type     = var.instance_type
   availability_zone = var.azs
+
+  root_block_device {
+    volume_size = var.volume_size
+    volume_type = var.volume_type
+  }
 
   tags = merge(var.tags, {
     Name = "${var.instance_name}${count.index + 1}"

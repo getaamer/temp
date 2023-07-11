@@ -25,6 +25,21 @@ variable "instance_name" {
   default = ""
 }
 
+variable "volume_size" {
+  type    = number
+  default = 20
+}
+
+variable "volume_type" {
+  type    = string
+  default = gp3
+}
+
+variable "instance_type" {
+  type    = string
+  default = ""
+}
+
 variable "instance_count" {
   type    = number
   default = 1
