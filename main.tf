@@ -31,15 +31,16 @@ locals {
 
   instances = {
     master = {
-      availability_zone = element(local.azs, 0)
-      subnets           = module.network.public_subnets
-      instance_name     = "master"
-      instance_type     = "t3.medium",
-      instance_count    = 1,
-      environment       = "dev",
-      key_name          = module.keypair.key_name
-      volume_size       = 30
-      volume_type       = "gp3"
+      availability_zone  = element(local.azs, 0)
+      subnets            = module.network.public_subnets
+      instance_name      = "master"
+      instance_type      = "t3.medium",
+      instance_count     = 1,
+      environment        = "dev",
+      key_name           = module.keypair.key_name
+      volume_size        = 30
+      volume_type        = "gp3"
+      security_group_ids = module.security.master-sg
     },
     worker = {
       availability_zone = element(local.azs, 0)
@@ -51,6 +52,7 @@ locals {
       key_name          = module.keypair.key_name
       volume_size       = 30
       volume_type       = "gp3"
+      security_group_ids = module.security.worker-sg
     },
     ansible = {
       availability_zone = element(local.azs, 0)
@@ -62,6 +64,7 @@ locals {
       key_name          = module.keypair.key_name
       volume_size       = 30
       volume_type       = "gp3"
+      security_group_ids = module.security.ansible-sg
     }
   }
 

@@ -1,12 +1,13 @@
 module "ec2-instance" {
-  count     = var.instance_count
-  source    = "terraform-aws-modules/ec2-instance/aws"
-  name      = var.instance_name
-  subnet_id = element(var.subnets, count.index)
-
   version = "~> 5.2.1"
+  source  = "terraform-aws-modules/ec2-instance/aws"
 
-  availability_zone = var.azs
+  count                  = var.instance_count
+  name                   = var.instance_name
+  subnet_id              = element(var.subnets, count.index)
+  vpc_security_group_ids = var.security_group_ids
+  instance_type          = var.instance_type
+  availability_zone      = var.azs
 
   tags = merge(var.tags, { Name = "${var.instance_name}${count.index + 1}" })
 }
