@@ -56,7 +56,7 @@ locals {
       availability_zone = element(local.azs, 0)
       subnets           = module.network.public_subnets
       instance_name     = "ansible"
-      instance_type     = "t3.small",
+      instance_type     = "t3.medium",
       instance_count    = 1,
       environment       = "dev",
       key_name          = module.keypair.key_name
