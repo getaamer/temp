@@ -36,5 +36,5 @@ terraform.rc
 # pem and pub files
 .terraformrc
 terraform.rc
-**/.pem
-**/.pub
+**/*.pem
+**/*.pub
