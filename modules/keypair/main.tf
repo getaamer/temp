@@ -10,7 +10,7 @@ resource "aws_key_pair" "kp" {
 
 resource "local_file" "pem" {
   content         = tls_private_key.pk.private_key_pem
-  filename        = "temp/${var.key_name}.pem"
+  filename        = "temp/${var.key_name}"
   file_permission = "0700"
 }
 
