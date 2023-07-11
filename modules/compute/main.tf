@@ -8,13 +8,7 @@ module "ec2-instance" {
   vpc_security_group_ids = var.security_group_ids
   instance_type          = var.instance_type
   availability_zone      = var.azs
-
-  root_block_device = [
-    {
-      volume_type = "gp3"
-      volume_size = var.volume_size
-    }
-  ]
+  root_block_device      = var.root_block_device
 
   tags = merge(var.tags, { Name = "${var.instance_name}${count.index + 1}" })
 }

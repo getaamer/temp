@@ -34,37 +34,53 @@ locals {
       availability_zone  = element(local.azs, 0)
       subnets            = module.network.public_subnets
       instance_name      = "master"
-      instance_type      = "t3.medium",
-      instance_count     = 1,
-      environment        = "dev",
+      instance_type      = "t3.medium"
+      instance_count     = 1
+      environment        = "dev"
       key_name           = module.keypair.key_name
-      volume_size        = 30
-      volume_type        = "gp3"
       security_group_ids = module.security.master-sg
+      root_block_device = [
+        {
+          volume_size = 30
+          volume_type = "gp3"
+        }
+      ]
     },
     worker = {
       availability_zone  = element(local.azs, 0)
       subnets            = module.network.public_subnets
       instance_name      = "worker"
-      instance_type      = "t3.medium",
-      instance_count     = 2,
-      environment        = "dev",
+      instance_type      = "t3.medium"
+      instance_count     = 2
+      environment        = "dev"
       key_name           = module.keypair.key_name
       volume_size        = 30
       volume_type        = "gp3"
       security_group_ids = module.security.worker-sg
+      root_block_device = [
+        {
+          volume_size = 30
+          volume_type = "gp3"
+        }
+      ]
     },
     ansible = {
       availability_zone  = element(local.azs, 0)
       subnets            = module.network.public_subnets
       instance_name      = "ansible"
-      instance_type      = "t3.medium",
-      instance_count     = 1,
-      environment        = "dev",
+      instance_type      = "t3.medium"
+      instance_count     = 1
+      environment        = "dev"
       key_name           = module.keypair.key_name
       volume_size        = 30
       volume_type        = "gp3"
       security_group_ids = module.security.ansible-sg
+      root_block_device = [
+        {
+          volume_size = 30
+          volume_type = "gp3"
+        }
+      ]
     }
   }
 
@@ -233,16 +249,10 @@ module "compute" {
   for_each = local.instances
   key_name = each.value.key_name
 
-  instance_count = each.value.instance_count
-  instance_name  = each.value.instance_name
-  instance_type  = each.value.instance_type
-
-  root_block_device = [
-    {
-      volume_type = each.value.volume_type
-      volume_size = each.value.volume_size
-    }
-  ]
+  instance_count    = each.value.instance_count
+  instance_name     = each.value.instance_name
+  instance_type     = each.value.instance_type
+  root_block_device = each.value.root_block_device
 
   subnets = each.value.subnets
   tags    = local.common_tags
