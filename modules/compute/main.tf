@@ -11,7 +11,7 @@ module "ec2-instance" {
 
   root_block_device = [
     {
-      encrypted   = true
+      encrypted   = false
       volume_type = "gp3"
       volume_size = var.volume_size
     }

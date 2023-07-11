@@ -36,7 +36,7 @@ locals {
       instance_name      = "master"
       instance_type      = "t3.medium"
       instance_count     = 1
-      volume_size        = 30
+      volume_size        = 27
       environment        = "dev"
       key_name           = module.keypair.key_name
       security_group_ids = [module.security.master-sg.id]
@@ -50,7 +50,7 @@ locals {
       instance_count     = 2
       environment        = "dev"
       key_name           = module.keypair.key_name
-      volume_size        = 30
+      volume_size        = 32
       security_group_ids = [module.security.worker-sg.id]
       attach_public_ip   = true
     },
@@ -58,11 +58,11 @@ locals {
       availability_zone  = element(local.azs, 0)
       subnets            = module.network.public_subnets
       instance_name      = "ansible"
-      instance_type      = "t3.medium"
+      instance_type      = "t3.small"
       instance_count     = 1
       environment        = "dev"
       key_name           = module.keypair.key_name
-      volume_size        = 30
+      volume_size        = 11
       security_group_ids = [module.security.ansible-sg.id]
       attach_public_ip   = true
     }
@@ -237,7 +237,7 @@ module "compute" {
   instance_name      = each.value.instance_name
   instance_type      = each.value.instance_type
   volume_size        = each.value.volume_size
-  attach_public_ip   = true
+  attach_public_ip   = each.value.attach_public_ip
   security_group_ids = each.value.security_group_ids
 
   subnets = each.value.subnets
