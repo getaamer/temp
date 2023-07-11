@@ -39,12 +39,6 @@ locals {
       environment        = "dev"
       key_name           = module.keypair.key_name
       security_group_ids = module.security.master-sg
-      root_block_device = [
-        {
-          volume_size = 30
-          volume_type = "gp3"
-        }
-      ]
     },
     worker = {
       availability_zone  = element(local.azs, 0)
@@ -57,12 +51,6 @@ locals {
       volume_size        = 30
       volume_type        = "gp3"
       security_group_ids = module.security.worker-sg
-      root_block_device = [
-        {
-          volume_size = 30
-          volume_type = "gp3"
-        }
-      ]
     },
     ansible = {
       availability_zone  = element(local.azs, 0)
@@ -75,12 +63,6 @@ locals {
       volume_size        = 30
       volume_type        = "gp3"
       security_group_ids = module.security.ansible-sg
-      root_block_device = [
-        {
-          volume_size = 30
-          volume_type = "gp3"
-        }
-      ]
     }
   }
 
@@ -249,10 +231,9 @@ module "compute" {
   for_each = local.instances
   key_name = each.value.key_name
 
-  instance_count    = each.value.instance_count
-  instance_name     = each.value.instance_name
-  instance_type     = each.value.instance_type
-  root_block_device = each.value.root_block_device
+  instance_count = each.value.instance_count
+  instance_name  = each.value.instance_name
+  instance_type  = each.value.instance_type
 
   subnets = each.value.subnets
   tags    = local.common_tags

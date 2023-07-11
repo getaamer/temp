@@ -43,7 +43,3 @@ variable "instance_count" {
 variable "security_group_ids" {
   default = []
 }
-
-variable "root_block_device" {
-  default = []
-}
