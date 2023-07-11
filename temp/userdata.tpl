@@ -47,6 +47,7 @@ write_files:
       sudo gitlab-runner install --user=gitlab-runner --working-directory=/home/gitlab-runner
       docker volume create gitlab-runner-config
       docker run -d --name gitlab-runner --restart always -v /var/run/docker.sock:/var/run/docker.sock -v gitlab-runner-config:/etc/gitlab-runner gitlab/gitlab-runner:latest
+      sudo mount -t nfs4 -o nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2,noresvport fs-00e74c2b55d52d73d.efs.ap-south-2.amazonaws.com:/ efs
 
 runcmd:
   - sudo apt update
