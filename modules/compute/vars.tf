@@ -48,3 +48,8 @@ variable "volume_size" {
 variable "security_group_ids" {
   default = []
 }
+
+variable "attach_public_ip" {
+  type    = bool
+  default = false
+}

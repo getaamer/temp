@@ -40,6 +40,7 @@ locals {
       environment        = "dev"
       key_name           = module.keypair.key_name
       security_group_ids = [module.security.master-sg.id]
+      attach_public_ip   = true
     },
     worker = {
       availability_zone  = element(local.azs, 0)
@@ -51,6 +52,7 @@ locals {
       key_name           = module.keypair.key_name
       volume_size        = 30
       security_group_ids = [module.security.worker-sg.id]
+      attach_public_ip   = true
     },
     ansible = {
       availability_zone  = element(local.azs, 0)
@@ -62,6 +64,7 @@ locals {
       key_name           = module.keypair.key_name
       volume_size        = 30
       security_group_ids = [module.security.ansible-sg.id]
+      attach_public_ip   = true
     }
   }
 
@@ -234,6 +237,7 @@ module "compute" {
   instance_name      = each.value.instance_name
   instance_type      = each.value.instance_type
   volume_size        = each.value.volume_size
+  attach_public_ip   = true
   security_group_ids = each.value.security_group_ids
 
   subnets = each.value.subnets
