@@ -72,8 +72,8 @@ locals {
     "master" = {
       ports = [
         {
-          from        = 7777
-          to          = 7777
+          from        = 22
+          to          = 22
           source      = "0.0.0.0/0"
           protocol    = "tcp"
           description = "ssh"
@@ -139,8 +139,8 @@ locals {
     "worker" = {
       ports = [
         {
-          from        = 7777
-          to          = 7777
+          from        = 22
+          to          = 22
           source      = "0.0.0.0/0"
           protocol    = "tcp"
           description = "ssh"
@@ -192,8 +192,8 @@ locals {
     "ansible" = {
       ports = [
         {
-          from        = 7777
-          to          = 7777
+          from        = 22
+          to          = 22
           source      = "0.0.0.0/0"
           protocol    = "tcp"
           description = "ssh"
@@ -224,8 +224,8 @@ locals {
           description = "efs"
         },
         {
-          from        = 7777
-          to          = 7777
+          from        = 22
+          to          = 22
           source      = "0.0.0.0/0"
           protocol    = "tcp"
           description = "ssh"
