@@ -226,13 +226,16 @@ module "keypair" {
 }
 
 module "compute" {
-  source         = "./modules/compute"
-  for_each       = local.instances
+  source   = "./modules/compute"
+  for_each = local.instances
+  key_name = each.value.key_name
+
   instance_count = each.value.instance_count
   instance_name  = each.value.instance_name
-  subnets        = each.value.subnets
+  instance_type  = each.value.instance_type
 
-  tags = local.common_tags
+  subnets = each.value.subnets
+  tags    = local.common_tags
 }
 
 module "network" {
