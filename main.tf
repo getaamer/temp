@@ -20,7 +20,8 @@ provider "aws" {
   region = "ap-south-2"
 }
 
-data "aws_availability_zones" "available" {}
+data "aws_availability_zones" "available" {
+}
 
 locals {
   vpc_cidr        = "171.23.0.0/16"
