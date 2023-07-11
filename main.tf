@@ -23,9 +23,10 @@ provider "aws" {
 data "aws_availability_zones" "available" {}
 
 locals {
-  vpc_cidr = "171.23.0.0/16"
-
-  azs = slice(data.aws_availability_zones.available.names, 0, 3)
+  vpc_cidr        = "171.23.0.0/16"
+  azs             = slice(data.aws_availability_zones.available.names, 0, 3)
+  private_subnets = [for k, v in local.azs : cidrsubnet(local.vpc_cidr, 8, k)]
+  public_subnets  = [for k, v in local.azs : cidrsubnet(local.vpc_cidr, 8, k + 4)]
 
   instances = {
     master = {
@@ -237,8 +238,8 @@ module "network" {
   name            = "dev-vpc"
   vpc_cidr        = local.vpc_cidr
   azs             = local.azs
-  private_subnets = [for k, v in local.azs : cidrsubnet(local.vpc_cidr, 8, k)]
-  public_subnets  = [for k, v in local.azs : cidrsubnet(local.vpc_cidr, 8, k + 4)]
+  private_subnets = local.private_subnets
+  public_subnets  = local.public_subnets
   tags            = local.common_tags
 }
 
