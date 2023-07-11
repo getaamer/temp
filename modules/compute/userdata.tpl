@@ -1,0 +1,60 @@
+#cloud-config
+preserve_hostname: true
+
+manage_etc_hosts: false
+
+packages:
+  - git
+  - unzip
+  - awscli
+  - docker.io
+  - unattended-upgrades
+
+package_update: true
+
+package_upgrade: true
+
+groups:
+  - docker
+
+system_info:
+  default_user:
+    groups: [docker]
+
+package_reboot_if_required: true
+
+write_files:
+  - path: /root/install.sh
+    content: |
+      #!/bin/bash
+      apt update -y && apt upgrade -y
+      apt install -y ansible
+      hostnamectl set-hostname ${hostname}
+      echo "${hostname}">>/etc/hostname
+      ipv4=$(ec2metadata --local-ipv4)
+      echo "$ipv4 ${hostname}">>/etc/hosts
+      echo "alias k=kubectl">>/home/ubuntu/.bashrc
+      echo "alias tf=terraform">>/home/ubuntu/.bashrc
+      curl https://baltocdn.com/helm/signing.asc | gpg --dearmor | sudo tee /usr/share/keyrings/helm.gpg > /dev/null
+      sudo apt-get install apt-transport-https --yes
+      echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/helm.gpg] https://baltocdn.com/helm/stable/debian/ all main" | sudo tee /etc/apt/sources.list.d/helm-stable-debian.list
+      sudo apt-get update
+      sudo apt-get install -y helm
+      sudo curl -L --output /usr/local/bin/gitlab-runner "https://gitlab-runner-downloads.s3.amazonaws.com/latest/binaries/gitlab-runner-linux-amd64"
+      sudo chmod +x /usr/local/bin/gitlab-runner
+      sudo useradd --comment 'GitLab Runner' --create-home gitlab-runner --shell /bin/bash
+      sudo rm /etc/systemd/system/gitlab-runner.service
+      sudo gitlab-runner install --user=gitlab-runner --working-directory=/home/gitlab-runner
+      docker volume create gitlab-runner-config
+      docker run -d --name gitlab-runner --restart always -v /var/run/docker.sock:/var/run/docker.sock -v gitlab-runner-config:/etc/gitlab-runner gitlab/gitlab-runner:latest
+
+runcmd:
+  - sudo apt update
+  - sudo apt upgrade -y
+  - bash /root/install.sh
+  # - gitlab-runner register --non-interactive --url "https://gitlab.com/" --token "glrt-aoejHu2RyBLiSnPsuY73" --executor "docker" --docker-image alpine:latest --description "docker-runner"
+
+power_state:
+  mode: reboot
+  timeout: 45
+  condition: True
