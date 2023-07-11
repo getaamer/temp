@@ -214,6 +214,24 @@ locals {
         }
       ]
     },
+    "efs" = {
+      ports = [
+        {
+          from        = 2049
+          to          = 2049
+          source      = "0.0.0.0/0"
+          protocol    = "tcp"
+          description = "efs"
+        },
+        {
+          from        = 7777
+          to          = 7777
+          source      = "0.0.0.0/0"
+          protocol    = "tcp"
+          description = "ssh"
+        }
+      ]
+    }
   }
 
   common_tags = {
@@ -259,4 +277,12 @@ module "security" {
   config = local.sg_config
   vpc_id = module.network.vpc_id
   tags   = local.common_tags
+}
+
+module "elastic" {
+  source    = "./modules/elasticfs"
+  subnets   = length(module.network.public_subnets)
+  subnet_id = module.network.public_subnets
+  efs-sg    = module.security.efs-sg
+  tags      = local.common_tags
 }
