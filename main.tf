@@ -60,7 +60,7 @@ locals {
       instance_count    = 1,
       environment       = "dev",
       key_name          = module.keypair.key_name
-      volume_size       = 10
+      volume_size       = 30
       volume_type       = "gp3"
     }
   }
