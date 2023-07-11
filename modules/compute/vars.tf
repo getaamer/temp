@@ -1,49 +1,31 @@
-# variable "security_group_ids" {
-#   type    = list(string)
-#   default = []
-# }
-
-# variable "key_name" {
-#   type    = string
-#   default = ""
-# }
-
-# variable "public_ip" {
-#   type    = bool
-#   default = false
-# }
-
-# variable "instance_type" {
-#   type    = string
-#   default = "t2.small"
-# }
-
-# variable "volume_size" {
-#   type    = number
-#   default = 20
-# }
-
-# variable "userdata" {
-#   type    = string
-#   default = ""
-# }
-
-variable "subnets" {
-  type    = list(string)
-  default = []
-}
-
-variable "instances" {
-  type    = map(any)
-  default = {}
-}
-
 variable "tags" {
   type    = map(any)
   default = {}
 }
 
-variable "configuration" {
-  description = "The total configuration, List of Objects/Dictionary"
-  default     = [{}]
+variable "azs" {
+  default = ""
+}
+
+variable "subnets" {
+  default = ""
+}
+
+variable "servers" {
+  type = map(object({
+  }))
+  default = {
+    "name" = {
+    }
+  }
+}
+
+variable "instance_name" {
+  type    = string
+  default = ""
+}
+
+variable "instance_count" {
+  type    = number
+  default = 1
 }

@@ -27,6 +27,42 @@ locals {
 
   azs = slice(data.aws_availability_zones.available.names, 0, 3)
 
+  servers = {
+    master = {
+      availability_zone = element(local.azs, 0)
+      subnets           = module.network.public_subnets
+      instance_name     = "master"
+      instance_type     = "t3.medium",
+      instance_count    = 1,
+      environment       = "dev",
+      key_name          = module.keypair.key_name
+      volume_size       = 30
+      volume_type       = "gp3"
+    },
+    worker = {
+      availability_zone = element(local.azs, 0)
+      subnets           = module.network.public_subnets
+      instance_name     = "worker"
+      instance_type     = "t3.medium",
+      instance_count    = 2,
+      environment       = "dev",
+      key_name          = module.keypair.key_name
+      volume_size       = 30
+      volume_type       = "gp3"
+    },
+    ansible = {
+      availability_zone = element(local.azs, 0)
+      subnets           = module.network.public_subnets
+      instance_name     = "ansible"
+      instance_type     = "t3.medium",
+      instance_count    = 1,
+      environment       = "dev",
+      key_name          = module.keypair.key_name
+      volume_size       = 30
+      volume_type       = "gp3"
+    }
+  }
+
   sg_config = {
     "master" = {
       ports = [
@@ -188,34 +224,12 @@ module "keypair" {
 }
 
 module "compute" {
-  source  = "./modules/compute"
-  subnets = module.network.public_subnets
-  instances = {
-    master = {
-      instance_type  = "t3.medium",
-      instance_count = 1,
-      environment    = "dev",
-      key_name       = module.keypair.key_name
-      volume_size    = 30
-      volume_type    = "gp3"
-    },
-    worker = {
-      instance_type  = "t3.medium",
-      instance_count = 2,
-      environment    = "dev",
-      key_name       = module.keypair.key_name
-      volume_size    = 30
-      volume_type    = "gp3"
-    },
-    ansible = {
-      instance_type  = "t3.medium",
-      instance_count = 1,
-      environment    = "dev",
-      key_name       = module.keypair.key_name
-      volume_size    = 30
-      volume_type    = "gp3"
-    }
-  }
+  source         = "./modules/compute"
+  for_each       = local.servers
+  instance_count = each.value.instance_count
+  instance_name  = each.value.instance_name
+
+  tags = local.common_tags
 }
 
 module "network" {
