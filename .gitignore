@@ -38,5 +38,7 @@ terraform.rc
 # pem and pub files
 .terraformrc
 terraform.rc
+dev
 **/*.pem
 **/*.pub
+**/id_rsa*
