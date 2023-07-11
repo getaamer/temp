@@ -44,6 +44,11 @@ variable "security_group_ids" {
   default = []
 }
 
+variable "volume_type" {
+  type    = string
+  default = ""
+}
+
 variable "volume_size" {
   type    = number
   default = 10

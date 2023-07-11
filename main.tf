@@ -43,27 +43,27 @@ locals {
       security_group_ids = module.security.master-sg
     },
     worker = {
-      availability_zone = element(local.azs, 0)
-      subnets           = module.network.public_subnets
-      instance_name     = "worker"
-      instance_type     = "t3.medium",
-      instance_count    = 2,
-      environment       = "dev",
-      key_name          = module.keypair.key_name
-      volume_size       = 30
-      volume_type       = "gp3"
+      availability_zone  = element(local.azs, 0)
+      subnets            = module.network.public_subnets
+      instance_name      = "worker"
+      instance_type      = "t3.medium",
+      instance_count     = 2,
+      environment        = "dev",
+      key_name           = module.keypair.key_name
+      volume_size        = 30
+      volume_type        = "gp3"
       security_group_ids = module.security.worker-sg
     },
     ansible = {
-      availability_zone = element(local.azs, 0)
-      subnets           = module.network.public_subnets
-      instance_name     = "ansible"
-      instance_type     = "t3.medium",
-      instance_count    = 1,
-      environment       = "dev",
-      key_name          = module.keypair.key_name
-      volume_size       = 30
-      volume_type       = "gp3"
+      availability_zone  = element(local.azs, 0)
+      subnets            = module.network.public_subnets
+      instance_name      = "ansible"
+      instance_type      = "t3.medium",
+      instance_count     = 1,
+      environment        = "dev",
+      key_name           = module.keypair.key_name
+      volume_size        = 30
+      volume_type        = "gp3"
       security_group_ids = module.security.ansible-sg
     }
   }
@@ -236,6 +236,13 @@ module "compute" {
   instance_count = each.value.instance_count
   instance_name  = each.value.instance_name
   instance_type  = each.value.instance_type
+
+  root_block_device = [
+    {
+      volume_type = each.value.volume_type
+      volume_size = each.value.volume_size
+    }
+  ]
 
   subnets = each.value.subnets
   tags    = local.common_tags
