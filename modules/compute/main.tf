@@ -1,8 +1,3 @@
-resource "random_shuffle" "subnets" {
-  input        = var.subnets
-  result_count = 1
-}
-
 data "aws_ami" "ubuntu" {
   most_recent = true
 
@@ -20,7 +15,6 @@ data "aws_ami" "ubuntu" {
 }
 
 locals {
-
   instances_flat = merge([
     for env, val in var.instances : {
       for idx in range(val["instance_count"]) : "${env}-${idx}" => {
@@ -29,10 +23,10 @@ locals {
         key_name      = val["key_name"]
         volume_size   = val["volume_size"]
         volume_type   = val["volume_type"]
+        subnet_id     = val["subnet_id"]
       }
     }
   ]...)
-
 }
 
 resource "aws_instance" "this" {
@@ -40,7 +34,7 @@ resource "aws_instance" "this" {
   ami           = data.aws_ami.ubuntu.id
   key_name      = each.value.key_name
   instance_type = each.value.instance_type
-  subnet_id     = random_shuffle.subnets.result[0]
+  subnet_id     = each.value.subnet_id
   root_block_device {
     volume_size = each.value.volume_size
     volume_type = each.value.volume_type
