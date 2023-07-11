@@ -36,9 +36,10 @@ locals {
       instance_name      = "master"
       instance_type      = "t3.medium"
       instance_count     = 1
+      volume_size        = 30
       environment        = "dev"
       key_name           = module.keypair.key_name
-      security_group_ids = module.security.master-sg
+      security_group_ids = [module.security.master-sg.id]
     },
     worker = {
       availability_zone  = element(local.azs, 0)
@@ -49,8 +50,7 @@ locals {
       environment        = "dev"
       key_name           = module.keypair.key_name
       volume_size        = 30
-      volume_type        = "gp3"
-      security_group_ids = module.security.worker-sg
+      security_group_ids = [module.security.worker-sg.id]
     },
     ansible = {
       availability_zone  = element(local.azs, 0)
@@ -61,8 +61,7 @@ locals {
       environment        = "dev"
       key_name           = module.keypair.key_name
       volume_size        = 30
-      volume_type        = "gp3"
-      security_group_ids = module.security.ansible-sg
+      security_group_ids = [module.security.ansible-sg.id]
     }
   }
 
@@ -231,9 +230,11 @@ module "compute" {
   for_each = local.instances
   key_name = each.value.key_name
 
-  instance_count = each.value.instance_count
-  instance_name  = each.value.instance_name
-  instance_type  = each.value.instance_type
+  instance_count     = each.value.instance_count
+  instance_name      = each.value.instance_name
+  instance_type      = each.value.instance_type
+  volume_size        = each.value.volume_size
+  security_group_ids = each.value.security_group_ids
 
   subnets = each.value.subnets
   tags    = local.common_tags
@@ -252,6 +253,7 @@ module "network" {
 module "security" {
   source = "./modules/security"
   config = local.sg_config
+  vpc_id = module.network.vpc_id
   tags   = local.common_tags
 }
 

@@ -12,7 +12,7 @@ module "ec2-instance" {
     {
       encrypted   = true
       volume_type = "gp3"
-      volume_size = 50
+      volume_size = var.volume_size
     }
   ]
 

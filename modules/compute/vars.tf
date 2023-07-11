@@ -40,6 +40,11 @@ variable "instance_count" {
   default = 1
 }
 
+variable "volume_size" {
+  type    = number
+  default = 10
+}
+
 variable "security_group_ids" {
   default = []
 }
