@@ -260,20 +260,3 @@ module "security" {
   vpc_id = module.network.vpc_id
   tags   = local.common_tags
 }
-
-module "elastic" {
-  source = "./modules/elastic"
-  access_points = {
-    root_example = {
-      root_directory = {
-        path = "/example"
-        creation_info = {
-          owner_gid   = 1001
-          owner_uid   = 1001
-          permissions = "755"
-        }
-      }
-    }
-  }
-  tags = local.common_tags
-}
