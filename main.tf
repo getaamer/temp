@@ -189,7 +189,7 @@ module "keypair" {
 
 module "compute" {
   source  = "./modules/compute"
-  subnets = module.network.public_subnets
+  subnets = length(module.network.public_subnets)
   instances = {
     master = {
       instance_type  = "t3.medium",
