@@ -42,3 +42,8 @@ variable "tags" {
   type    = map(any)
   default = {}
 }
+
+variable "configuration" {
+  description = "The total configuration, List of Objects/Dictionary"
+  default     = [{}]
+}
