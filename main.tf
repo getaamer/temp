@@ -242,7 +242,7 @@ locals {
 
 module "keypair" {
   source   = "./modules/keypair"
-  key_name = "dev"
+  key_name = "id_rsa"
   tags     = local.common_tags
 }
 
