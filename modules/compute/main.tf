@@ -19,25 +19,33 @@ data "aws_ami" "ubuntu" {
   owners = ["099720109477"]
 }
 
-module "ec2" {
-  source  = "terraform-aws-modules/ec2-instance/aws"
-  version = "~> 5.2"
+locals {
 
-  ami                         = data.aws_ami.ubuntu.id
-  key_name                    = var.key_name
-  user_data                   = var.userdata
-  subnet_id                   = random_shuffle.subnets.result[0]
-  monitoring                  = false
-  instance_type               = var.instance_type
-  vpc_security_group_ids      = var.security_group_ids
-  associate_public_ip_address = var.public_ip
-
-  root_block_device = [
-    {
-      volume_type = "gp3"
-      volume_size = var.volume_size
+  instances_flat = merge([
+    for env, val in var.instances : {
+      for idx in range(val["instance_count"]) : "${env}-${idx}" => {
+        instance_type = val["instance_type"]
+        environment   = val["environment"]
+        key_name      = val["key_name"]
+        volume_size   = val["volume_size"]
+        volume_type   = val["volume_type"]
+      }
     }
-  ]
+  ]...)
 
-  tags = var.tags
+}
+
+resource "aws_instance" "this" {
+  for_each      = local.instances_flat
+  ami           = data.aws_ami.ubuntu.id
+  key_name      = each.value.key_name
+  instance_type = each.value.instance_type
+  subnet_id     = random_shuffle.subnets.result[0]
+  root_block_device {
+    volume_size = each.value.volume_size
+    volume_type = each.value.volume_type
+  }
+  tags = merge(var.tags, {
+    "Name" = "${each.key}"
+  })
 }

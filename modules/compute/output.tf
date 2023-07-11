@@ -1,3 +1,3 @@
-output "ids" {
-  value = module.ec2
-}
+# output "instance" {
+#   value = aws_instance.this
+# }

@@ -188,12 +188,34 @@ module "keypair" {
 }
 
 module "compute" {
-  source        = "./modules/compute"
-  subnets       = module.network.public_subnets
-  volume_size   = 30
-  instance_type = "t3.medium"
-  key_name      = module.keypair.key_name
-  tags          = local.common_tags
+  source  = "./modules/compute"
+  subnets = module.network.public_subnets
+  instances = {
+    master = {
+      instance_type  = "t3.medium",
+      instance_count = 1,
+      environment    = "dev",
+      key_name       = module.keypair.key_name
+      volume_size    = 30
+      volume_type    = "gp3"
+    },
+    worker = {
+      instance_type  = "t3.medium",
+      instance_count = 2,
+      environment    = "dev",
+      key_name       = module.keypair.key_name
+      volume_size    = 30
+      volume_type    = "gp3"
+    },
+    ansible = {
+      instance_type  = "t3.medium",
+      instance_count = 1,
+      environment    = "dev",
+      key_name       = module.keypair.key_name
+      volume_size    = 30
+      volume_type    = "gp3"
+    }
+  }
 }
 
 module "network" {
