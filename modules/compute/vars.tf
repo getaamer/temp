@@ -28,9 +28,9 @@
 #   default = ""
 # }
 
-variable "subnet_id" {
-  type    = string
-  default = ""
+variable "subnets" {
+  type    = list(string)
+  default = []
 }
 
 variable "instances" {

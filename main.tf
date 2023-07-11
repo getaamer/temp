@@ -187,13 +187,9 @@ module "keypair" {
   tags     = local.common_tags
 }
 
-resource "random_shuffle" "subnets" {
-  input        = module.network.public_subnets
-  result_count = 1
-}
-
 module "compute" {
-  source = "./modules/compute"
+  source  = "./modules/compute"
+  subnets = module.network.public_subnets
   instances = {
     master = {
       instance_type  = "t3.medium",
@@ -202,7 +198,6 @@ module "compute" {
       key_name       = module.keypair.key_name
       volume_size    = 30
       volume_type    = "gp3"
-      subnet_id      = random_shuffle.subnets.result[0]
     },
     worker = {
       instance_type  = "t3.medium",
@@ -211,7 +206,6 @@ module "compute" {
       key_name       = module.keypair.key_name
       volume_size    = 30
       volume_type    = "gp3"
-      subnet_id      = random_shuffle.subnets.result[0]
     },
     ansible = {
       instance_type  = "t3.medium",
@@ -220,7 +214,6 @@ module "compute" {
       key_name       = module.keypair.key_name
       volume_size    = 30
       volume_type    = "gp3"
-      subnet_id      = random_shuffle.subnets.result[0]
     }
   }
 }
