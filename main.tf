@@ -230,6 +230,7 @@ module "compute" {
   for_each       = local.instances
   instance_count = each.value.instance_count
   instance_name  = each.value.instance_name
+  subnets        = each.value.subnets
 
   tags = local.common_tags
 }
